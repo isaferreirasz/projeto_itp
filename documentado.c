@@ -9,6 +9,7 @@
    A cada elemento[i][j], é atribuído um valor de 1 a 9 de acordo com o contador. 
    A expressão '0' + contador converte o número inteiro contador em seu correspondente caractere ASCII.
 */
+
 void gerarTabuleiro(char tabuleiro[3][3]) {
     int contador = 1;
     for (int i = 0; i < 3; i++) {
@@ -19,6 +20,14 @@ void gerarTabuleiro(char tabuleiro[3][3]) {
     }
 }
 
+/* A função exibirTabuleiro recebe como parâmetro a matriz 3x3 denominada como tabuleiro.
+   o printf exibe a mensagem de que o tabuleiro será mostrado.
+   É iniciado um loop que percorre todos os elementos da matriz.
+   A variável i representa o índice da linha atual.
+   A variável j representa o índice da coluna atual.
+   
+
+*/
 void exibirTabuleiro(char tabuleiro[3][3]) {
     printf("Tabuleiro 3x3:\n");
     for (int i = 0; i < 3; i++) {
