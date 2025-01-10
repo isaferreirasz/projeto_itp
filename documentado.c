@@ -2,11 +2,18 @@
 #include <stdlib.h>
 #include <time.h>
 
+/* A função gerarTabuleiro recebe como parâmetro a matriz 3x3 denominada como tabuleiro.
+   Um contador é inicializado com o valor 1. Esse contador será usado para preencher a matriz com os números de 1 a 9.
+   Os dois laços de repetição são utilizados para percorrer cada elemento da matriz. 
+   O primeiro loop (i) percorre as linhas da matriz, enquanto o segundo loop (j) percorre as colunas. 
+   A cada elemento[i][j], é atribuído um valor de 1 a 9 de acordo com o contador. 
+   A expressão '0' + contador converte o número inteiro contador em seu correspondente caractere ASCII.
+*/
 void gerarTabuleiro(char tabuleiro[3][3]) {
     int contador = 1;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            tabuleiro[i][j] = '0' + contador; 
+            tabuleiro[i][j] = contador; 
             contador++;
         }
     }
