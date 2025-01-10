@@ -13,7 +13,7 @@ void gerarTabuleiro(char tabuleiro[3][3]) {
     int contador = 1;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            tabuleiro[i][j] = contador; 
+            tabuleiro[i][j] = 0 + contador; 
             contador++;
         }
     }
