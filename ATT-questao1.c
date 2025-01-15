@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h> 
 
 char **tabuleiro; 
 int i, j;
@@ -10,7 +11,6 @@ void gerarTabuleiro() {
         tabuleiro[i] = malloc(3 * sizeof(char)); 
     }
 
-    
     int contador = 1;
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
@@ -18,7 +18,6 @@ void gerarTabuleiro() {
             contador++;
         }
     }
-
 }
 
 void exibirTabuleiro() {
@@ -30,7 +29,7 @@ void exibirTabuleiro() {
     }
 }
 
-void jogar(char **tabuleiro) {
+void jogarX(char **tabuleiro) {
     int posicao;
     while (1) {
         printf("Escolha uma posição para colocar o X: ");
@@ -52,19 +51,20 @@ void jogar(char **tabuleiro) {
     }
 }
 
-void jogarComputador(char **tabuleiro){
-  int posicao;
-  int linha, coluna;
-  while (1) {
-      posicao = rand() % 9;
-      linha = posicao / 3;
-      coluna = posicao % 3;
+void jogar0(char **tabuleiro) {
+    int posicao;
+    int linha, coluna;
+    while (1) {
+        posicao = rand() % 9;
+        linha = posicao / 3;
+        coluna = posicao % 3;
 
-      if (tabuleiro[linha][coluna] != 'X' && tabuleiro[linha][coluna] != 'O') {
-          tabuleiro[linha][coluna] = 'O';
-          break;
-      }
-  }
+        if (tabuleiro[linha][coluna] != 'X' && tabuleiro[linha][coluna] != 'O') {
+            tabuleiro[linha][coluna] = 'O';
+            printf("O jogador O marcou a posição %d\n", posicao + 1); 
+            break;
+        }
+    }
 }
 
 int verificarVitoria(char **tabuleiro, char jogador) {
@@ -81,6 +81,18 @@ int verificarVitoria(char **tabuleiro, char jogador) {
     return 0;
 }
 
+
+int verificarEmpate(char **tabuleiro) {
+    for (i = 0; i < 3; i++) {
+        for (j = 0; j < 3; j++) {
+            if (tabuleiro[i][j] != 'X' && tabuleiro[i][j] != 'O') {
+                return 0; 
+            }
+        }
+    }
+    return 1; 
+}
+
 int liberarTabuleiro() {
     for (i = 0; i < 3; i++) {
         free(tabuleiro[i]); 
@@ -90,31 +102,36 @@ int liberarTabuleiro() {
 }
 
 int main() {
+    srand(time(NULL)); 
     gerarTabuleiro(); 
     exibirTabuleiro(); 
-  for (int i = 0; i < 9; i++) {
-          if (i % 2 == 0) {
-              jogar(tabuleiro);
-          } else {
-              jogarComputador(tabuleiro);
-              exibirTabuleiro();
-          }
-         
 
-          if (verificarVitoria(tabuleiro, 'X')) {
-              exibirTabuleiro();  
-              printf("Jogador X venceu!\n");
-              return 0;
-          } else if (verificarVitoria(tabuleiro, 'O')) {
-              exibirTabuleiro();
-              printf("Jogador 0 venceu!\n");
-              
-              return 0;
-          }
-      }
+    for (int i = 0; i < 9; i++) {
+        if (i % 2 == 0) {
+            jogarX(tabuleiro);
+            exibirTabuleiro(); 
+        } else {
+            jogar0(tabuleiro);
+            exibirTabuleiro(); 
+        }
 
+        if (verificarVitoria(tabuleiro, 'X')) {
+            printf("Jogador X venceu!\n");
+            liberarTabuleiro();
+            return 0;
+        } else if (verificarVitoria(tabuleiro, 'O')) {
+            printf("Jogador O venceu!\n");
+            liberarTabuleiro();
+            return 0;
+        }
+    }
+
+  if (verificarEmpate(tabuleiro)) {
+      exibirTabuleiro();
       printf("Deu velha!\n");
       liberarTabuleiro();
-  return 0;
-  
+      return 0;
   }
+    liberarTabuleiro();
+    return 0;
+}
