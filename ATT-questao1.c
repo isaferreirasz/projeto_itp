@@ -104,34 +104,35 @@ int liberarTabuleiro() {
 int main() {
     srand(time(NULL)); 
     gerarTabuleiro(); 
-    exibirTabuleiro(); 
+    printf("Boas vindas ao Jogo da Velha! Você é o jogador X!\n");
+    exibirTabuleiro();
 
-    for (int i = 0; i < 9; i++) {
-        if (i % 2 == 0) {
-            jogarX(tabuleiro);
-            exibirTabuleiro(); 
-        } else {
-            jogar0(tabuleiro);
-            exibirTabuleiro(); 
+        for (int i = 0; i < 9; i++) {
+            if (i % 2 == 0) {
+                jogarX(tabuleiro);
+                exibirTabuleiro(); 
+                if (verificarVitoria(tabuleiro, 'X')) {
+                    printf("Jogador X venceu!\n");
+                    liberarTabuleiro();
+                    return 0;
+                }
+            } else {
+                jogar0(tabuleiro);
+                exibirTabuleiro(); 
+                if (verificarVitoria(tabuleiro, 'O')) {
+                    printf("Jogador O venceu!\n");
+                    liberarTabuleiro();
+                    return 0;
+                }
+            }
+            if (verificarEmpate(tabuleiro)) {
+                exibirTabuleiro();
+                printf("Deu velha!\n");
+                liberarTabuleiro();
+                return 0;
+            }
         }
 
-        if (verificarVitoria(tabuleiro, 'X')) {
-            printf("Jogador X venceu!\n");
-            liberarTabuleiro();
-            return 0;
-        } else if (verificarVitoria(tabuleiro, 'O')) {
-            printf("Jogador O venceu!\n");
-            liberarTabuleiro();
-            return 0;
-        }
+        liberarTabuleiro();
+        return 0;
     }
-
-  if (verificarEmpate(tabuleiro)) {
-      exibirTabuleiro();
-      printf("Deu velha!\n");
-      liberarTabuleiro();
-      return 0;
-  }
-    liberarTabuleiro();
-    return 0;
-}
