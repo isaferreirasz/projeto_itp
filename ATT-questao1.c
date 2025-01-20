@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h> 
+#include <time.h>
+#include <ctype.h>
+#include <string.h>
 
 char **tabuleiro; 
 int i, j;
@@ -29,13 +31,26 @@ void exibirTabuleiro() {
     }
 }
 
+int entradaValida(char *entrada) {
+    
+    if (strlen(entrada) == 1 && isdigit(entrada[0])) {
+        int posicao = entrada[0] - '0'; 
+        return (posicao >= 1 && posicao <= 9); 
+    }
+    return 0; 
+}
+
 void jogarX(char **tabuleiro) {
-    int posicao;
+    char entrada[10];
+
     while (1) {
-        printf("Escolha uma posição para colocar o X: ");
-        scanf("%d", &posicao);
-        posicao--;
-        if (posicao >= 0 && posicao < 9) {
+        printf("Escolha uma posição para colocar o X (1-9): ");
+        fgets(entrada, sizeof(entrada), stdin); 
+        
+        entrada[strcspn(entrada, "\n")] = 0;
+
+        if (entradaValida(entrada)) {
+            int posicao = entrada[0] - '0' - 1; 
             int linha = posicao / 3;
             int coluna = posicao % 3;
 
@@ -46,12 +61,12 @@ void jogarX(char **tabuleiro) {
                 printf("Posição já ocupada! Tente novamente.\n");
             }
         } else {
-            printf("Posição inválida! Tente novamente.\n");
+            printf("Entrada inválida! Tente novamente.\n");
         }
     }
 }
 
-void jogar0(char **tabuleiro) {
+void jogarO(char **tabuleiro) {
     int posicao;
     int linha, coluna;
     while (1) {
@@ -81,7 +96,6 @@ int verificarVitoria(char **tabuleiro, char jogador) {
     return 0;
 }
 
-
 int verificarEmpate(char **tabuleiro) {
     for (i = 0; i < 3; i++) {
         for (j = 0; j < 3; j++) {
@@ -93,12 +107,11 @@ int verificarEmpate(char **tabuleiro) {
     return 1; 
 }
 
-int liberarTabuleiro() {
+void liberarTabuleiro() {
     for (i = 0; i < 3; i++) {
         free(tabuleiro[i]); 
     }
     free(tabuleiro); 
-    return 0;
 }
 
 int main() {
@@ -107,32 +120,30 @@ int main() {
     printf("Boas vindas ao Jogo da Velha! Você é o jogador X!\n");
     exibirTabuleiro();
 
-        for (int i = 0; i < 9; i++) {
-            if (i % 2 == 0) {
-                jogarX(tabuleiro);
-                exibirTabuleiro(); 
-                if (verificarVitoria(tabuleiro, 'X')) {
-                    printf("Jogador X venceu!\n");
-                    liberarTabuleiro();
-                    return 0;
-                }
-            } else {
-                jogar0(tabuleiro);
-                exibirTabuleiro(); 
-                if (verificarVitoria(tabuleiro, 'O')) {
-                    printf("Jogador O venceu!\n");
-                    liberarTabuleiro();
-                    return 0;
-                }
+    for (int i = 0; i < 9; i++) {
+        if (i % 2 == 0) {
+            jogarX(tabuleiro);
+            exibirTabuleiro(); 
+            if (verificarVitoria(tabuleiro, 'X')) {
+                printf("Jogador X venceu!\n");
+                liberarTabuleiro();
+                return 0;
             }
-            if (verificarEmpate(tabuleiro)) {
-                exibirTabuleiro();
-                printf("Deu velha!\n");
+        } else {
+            jogarO(tabuleiro );
+            exibirTabuleiro(); 
+            if (verificarVitoria(tabuleiro, 'O')) {
+                printf("Jogador O venceu!\n");
                 liberarTabuleiro();
                 return 0;
             }
         }
-
-        liberarTabuleiro();
-        return 0;
+        if (verificarEmpate(tabuleiro)) {
+            printf("Empate!\n");
+            liberarTabuleiro();
+            return 0;
+        }
     }
+    liberarTabuleiro();
+    return 0;
+}
